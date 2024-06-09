@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const Cart = require('../models/cart');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
@@ -19,7 +20,13 @@ const register = async (req, res) => {
         const newUser = new User({ name, email, password:hashedPassword });
         await newUser.save();
         
-        console.log(newUser);
+        const cart = new Cart({
+            userId: newUser.id,
+            products: [],
+            totalAmount: 0
+        });
+        
+        await cart.save();
 
         const token = jwt.sign(
             { userId: newUser.id, email: newUser.email },

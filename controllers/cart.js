@@ -5,12 +5,7 @@ const getCart = async (req, res) => {
     try {
         let cart = await Cart.findOne({ userId: req.user.id }).populate('products.productId');
         if (!cart){
-            cart = new Cart({
-                userId: req.user.id,
-                products: [],
-                totalAmount: 0
-            });
-            return res.json({items:[],totalAmount:0});
+            return res.status(404).json({error:"Cart not found!"});
         }
         
         const items = cart.products.map(item => ({
@@ -38,7 +33,6 @@ const addToCart = async (req, res) => {
         let cart = await Cart.findOne({ userId: req.user.id })
        
         if (!cart) {
-         
             cart = new Cart({
                 userId: req.user.id,
                 products: [{ productId, quantity }],
