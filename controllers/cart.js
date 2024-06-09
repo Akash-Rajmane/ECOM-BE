@@ -76,7 +76,7 @@ const updateCartOnLogin = async (req,res) => {
         let cart = await Cart.findOne({ userId: req.user.id });
 
         if (!cart) {
-            cart = new Cart({ user: userId, items: [], totalAmount: 0 });
+            cart = new Cart({ userId, items: [], totalAmount: 0 });
         }
 
         for (let item of cartItems) {
