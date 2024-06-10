@@ -41,7 +41,7 @@ const addToCart = async (req, res) => {
         } else {
           
             const existingProduct = cart.products.filter(p =>{ 
-                return p.productId._id.toString() === productId 
+                return p.productId.toString() === productId 
             });
           
             if (existingProduct.length === 0) {
@@ -81,7 +81,7 @@ const updateCartOnLogin = async (req,res) => {
 
         for (let item of cartItems) {
             
-            const existingProductIndex = cart.products.findIndex(product => product.productId._id.toString() === item.id);
+            const existingProductIndex = cart.products.findIndex(product => product.productId.toString() === item.id);
             if (existingProductIndex !== -1) {
                 // If the product already exists in the cart, update its quantity
                 cart.products[existingProductIndex].quantity += item.quantity;
@@ -97,7 +97,7 @@ const updateCartOnLogin = async (req,res) => {
         await cart.save();
 
         const items = cart.products.map(item => ({
-            id: item.productId._id,
+            id: item.productId,
             name: item.productId.name,
             description: item.productId.description,
             price: item.productId.price,
