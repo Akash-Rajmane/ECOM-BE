@@ -60,7 +60,7 @@ const addToCart = async (req, res) => {
             items: cart.products,
             totalAmount: cart.totalAmount,
         }
-        res.status(200).json(dbCart);
+        res.status(200).json({message:"Selected item has been added to the cart successfully!",dbCart});
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: 'Internal Server Error' });
@@ -76,8 +76,9 @@ const updateCartOnLogin = async (req,res) => {
         let cart = await Cart.findOne({ userId: req.user.id });
 
         if (!cart) {
-            cart = new Cart({ userId, items: [], totalAmount: 0 });
+            cart = new Cart({ userId: req.user.id, items: [], totalAmount: 0 });
         }
+
 
         for (let item of cartItems) {
             
@@ -96,16 +97,9 @@ const updateCartOnLogin = async (req,res) => {
       
         await cart.save();
 
-        const items = cart.products.map(item => ({
-            id: item.productId,
-            name: item.productId.name,
-            description: item.productId.description,
-            price: item.productId.price,
-            quantity: item.quantity
-        }));
 
         const dbCart = {
-            items,
+            items: cart.products,
             totalAmount: cart.totalAmount
         };
 
